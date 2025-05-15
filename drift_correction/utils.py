@@ -2,6 +2,7 @@
 Utilities functions
 """
 from pathlib import Path
+from tempfile import gettempdir
 import numpy as np
 import tifffile
 import dm3_lib as dm3
@@ -11,7 +12,7 @@ from qtpy.QtWidgets import QMessageBox
 
 def error(message):
     """
-    Shows a pop up with the given error message.
+    Shows a pop-up with the given error message.
     """
     e = QMessageBox()
     print("ERROR: ", message)
@@ -53,3 +54,17 @@ def plot(values, fname):
     ax.set_xlabel('# Frames')
     ax.legend()
     plt.savefig(fname)
+
+
+class WorkingDirectory:
+    """ Class to call user directory via the 'with' statement """
+
+    def __init__(self, dirname=None):
+        dirname = dirname or Path(gettempdir()) / "drift_correction"
+        self.dirname = Path(dirname)
+
+    def __enter__(self):
+        return self.dirname
+
+    def __exit__(self, exc, value, tb):
+        pass
