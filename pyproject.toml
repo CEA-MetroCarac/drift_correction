@@ -11,10 +11,6 @@ requires-python = ">=3.8"
 license = { text = "GPL v3" }
 authors = [ { name = "Patrick Quéméré", email = "patrick.quemere@cea.fr" } ]
 
-[project.urls]
-Repository = "https://github.com/CEA-MetroCarac/drift_correction.git"
-Issues = "https://github.com/CEA-MetroCarac/drift_correction/issues"
-
 classifiers = [
     "Framework :: napari",
     "Programming Language :: Python",
@@ -56,3 +52,7 @@ testpaths = ["tests"]
 dev = [
     "pytest",
 ]
+
+[project.urls]
+Repository = "https://github.com/CEA-MetroCarac/drift_correction.git"
+Issues = "https://github.com/CEA-MetroCarac/drift_correction/issues"
