@@ -1,0 +1,33 @@
+name: drift_correction
+schema_version: 0.2.0
+
+contributions:
+  commands:
+    - id: drift_correction.drift_correction
+      title: realign frames
+      python_name: drift_correction.drift_correction:napari_widget
+
+    - id: drift_correction.read_tif
+      title: Read ".tif" files
+      python_name: drift_correction.utils:get_reader
+
+    - id: drift_correction.read_dm
+      title: Read ".dm3" or ".dm4" files
+      python_name: drift_correction.utils:get_reader
+
+  widgets:
+    - command: drift_correction.drift_correction
+      display_name: drift_correction
+
+  readers:
+    - command: drift_correction.read_tif
+      filename_patterns:
+        - '*.tif'
+        - '*.tiff'
+      accepts_directories: false
+
+    - command: drift_correction.read_dm
+      filename_patterns:
+        - '*.dm3'
+        - '*.dm4'
+      accepts_directories: false

@@ -1,0 +1,49 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "drift_correction"
+dynamic = ["version"]
+description = "An application for re-aligning frames from an image stack."
+readme = { file = "README.md", content-type = "text/markdown" }
+requires-python = ">=3.8"
+license = { text = "GNU GENERAL PUBLIC LICENSE Version 3" }
+authors = [ { name = "Patrick Quéméré", email = "patrick.quemere@cea.fr" } ]
+
+[project.urls]
+Repository = "https://github.com/CEA-MetroCarac/drift_correction.git"
+Issues = "https://github.com/CEA-MetroCarac/drift_correction/issues"
+
+classifiers = [
+    "Framework :: napari",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Operating System :: OS Independent",
+    "License :: OSI Approved :: GPL v3"
+]
+
+dependencies = [
+    "diplib",
+    "napari[all]",
+    "napari-plugin-engine",
+    "magicgui",
+    "dm3_lib @ git+https://github.com/piraynal/pyDM3reader.git",
+]
+
+
+[tool.setuptools]
+packages = ["drift_correction"]
+
+[tool.setuptools.dynamic]
+version = { attr = "drift_correction.VERSION" }
+
+[tool.setuptools.package-data]
+"drift_correction" = ["napari.yaml"]
+
+[project.entry-points."napari.manifest"]
+"drift-correction" = "drift_correction:napari.yaml"
+
