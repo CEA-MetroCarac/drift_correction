@@ -48,6 +48,8 @@ def ex_staggered_dots(show_napari=False):
 
     else:
         arr_aligned, shifts, shifts_cumul = process(arr)
+        print()
+        print(shifts_cumul)
         return arr_aligned, shifts, shifts_cumul
 
 
