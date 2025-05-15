@@ -4,7 +4,6 @@ Main functions dedicated to the drift correction processing
 import sys
 from pathlib import Path
 import time
-from tempfile import TemporaryDirectory
 import numpy as np
 import diplib as dip
 import napari
@@ -13,10 +12,11 @@ from tifffile import imwrite, TiffWriter
 from qtpy.QtWidgets import QProgressBar
 from qtpy.QtWidgets import QApplication
 
-from utils import plot
+from drift_correction.utils import WorkingDirectory, plot
 
 
 def on_init(widget):
+    """ Drift_correction widget initialization """
     widget.native.setStyleSheet("QWidget{font-size: 12pt;}")
     # widget.native.layout().addStretch()
 
@@ -32,30 +32,33 @@ def on_init(widget):
                save_tmat={"widget_type": "CheckBox", "label": "plot and save shifts"},
                call_button="ALIGN FRAMES")
 def napari_widget(input_stack: 'napari.layers.Image',
-                  index_min: int = 10,
-                  index_max: int = 20,
+                  index_min: int = 0, index_max: int = 9999,
                   save_tmat: bool = True) -> 'napari.layers.Image':
-    """ Drift_correction pluggin in Napari """
+    """ Drift_correction widget in Napari """
 
     global widget_
     widget = widget_
 
-    dirname = Path(input_stack.source.path).parent if save_tmat else None
+    if save_tmat:
+        if hasattr(input_stack, 'source') and input_stack.source.path is not None:
+            dirname = Path(input_stack.source.path).parent
+        else:
+            dirname = Path.cwd()
 
     def pbar_update(k, nframes):
         widget._progress_bar.setValue(int(100 * (k + 1) / nframes))
         QApplication.processEvents()
 
-    arr_aligned = process(input_stack.data,
-                          ind_min=index_min, ind_max=index_max, pbar_update=pbar_update,
-                          dirname=dirname)
+    arr_aligned, _, _ = process(input_stack.data,
+                                ind_min=index_min, ind_max=index_max, pbar_update=pbar_update,
+                                dirname=dirname)
 
     return napari.layers.Image(arr_aligned, name=input_stack.name + " ALIGNED")
 
 
 def process(arr,
             ind_min=0, ind_max=9999, pbar_update=None,
-            dirname=None, fname_aligned=None):
+            dirname=None, fname_aligned=None, working_dir=None):
     """
     Drift correction processing
 
@@ -71,22 +74,30 @@ def process(arr,
         Progress bar updating function with arguments the current index and
         the total number of frames to process ('nframes')
     dirname: str, optional
-        Dirname where to save the shifts values (.txt) and the related plot
+        Dirname where to save the shifts values (.txt) and the related plot (.png).
+        If None, no saving action is performed.
     fname_aligned: str, optional
-        Pathname for saving the aligned stack (.tif)
+        Pathname for saving the aligned stack (.tif).
+        If None, no saving action is performed.
+    working_dir: str, optional
+        Dirname related to the working directory where the images stack is split into individual
+        frames before processing. If None, create a temporarily directory
+
 
     Returns
     -------
     arr_aligned: numpy.ndarray((nframes, my, mx))
         The aligned and cropped image stack. (The cropping area is related to the 'valid' one)
+    shifts: numpy.ndarray((nframes, 2))
+        Shifts (translations) calculated between 2 successive frames (tx, ty)
+    shifts_cumul: numpy.ndarray((nframes, 2))
+        Cumulative shifts (tx, ty)
     """
     assert arr.ndim == 3
 
-    with TemporaryDirectory() as tmpdir:
-        tmpdir = Path(r"C:\Users\PQ177701\AppData\Local\pystack3d_napari")
-        # tmpdir = Path(tmpdir)
-        dirname_img = tmpdir / "images"
-        dirname_img.mkdir(exist_ok=True)
+    with WorkingDirectory(dirname=working_dir) as working_dir:
+        dirname_img = working_dir / "images"
+        dirname_img.mkdir(parents=True, exist_ok=True)
 
         for i, img in enumerate(arr):
             imwrite(dirname_img / f"img_{i:03d}.tif", img)
@@ -135,19 +146,21 @@ def process(arr,
         arr_aligned = arr_aligned[:, imin:imax, jmin:jmax]
 
         if dirname:
-            plot(shifts, dirname / "tmats.png")
-            plot(shifts_cumul, dirname / "tmats_cumul.png")
-            np.savetxt(dirname / "tmats.txt", shifts)
-            np.savetxt(dirname / "tmats_cumul.txt", shifts_cumul)
+            plot(shifts, dirname / "shifts.png")
+            plot(shifts_cumul, dirname / "shifts_cumul.png")
+            np.savetxt(dirname / "shifts.txt", shifts)
+            np.savetxt(dirname / "shifts_cumul.txt", shifts_cumul)
 
         if fname_aligned:
             with TiffWriter(fname_aligned, bigtiff=True) as tiff_out:
                 tiff_out.write(arr_aligned)
 
-        return arr_aligned
+        return arr_aligned, shifts, shifts_cumul
 
 
 def pbar_stdout_update(k, nframes):
+    """ Progress Bar evolution written in the console """
+
     global t0
     if k == 0:
         t0 = time.time()
@@ -169,12 +182,4 @@ def launch():
 
 
 if __name__ == "__main__":
-    # launch()
-
-    from utils import read_dm
-
-    dirname = Path(r"C:\Users\PQ177701\Desktop\DATA\HAADF\HAADF_Test_Images\2µs-x10M-i5pA")
-    fname = dirname / "2µs-x10M-i5pA.dm4"
-    arr = read_dm(fname)[0][0]
-    process(arr, ind_min=10, ind_max=20,
-            dirname=dirname, fname_aligned=dirname / "test.tif")
+    launch()
