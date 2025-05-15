@@ -8,7 +8,7 @@ dynamic = ["version"]
 description = "An application for re-aligning frames from an image stack."
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.8"
-license = { text = "GNU GENERAL PUBLIC LICENSE Version 3" }
+license = { text = "GPL v3" }
 authors = [ { name = "Patrick Quéméré", email = "patrick.quemere@cea.fr" } ]
 
 [project.urls]
@@ -22,8 +22,9 @@ classifiers = [
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
     "Operating System :: OS Independent",
-    "License :: OSI Approved :: GPL v3"
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
 ]
 
 dependencies = [
@@ -47,3 +48,11 @@ version = { attr = "drift_correction.VERSION" }
 [project.entry-points."napari.manifest"]
 "drift-correction" = "drift_correction:napari.yaml"
 
+[tool.pytest.ini_options]
+minversion = "6.0"
+testpaths = ["tests"]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+]
