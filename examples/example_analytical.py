@@ -28,7 +28,6 @@ def ex_staggered_dots(show_napari=False):
     for k in range(nframes):
         shift = k * np.array([3., 1.])
         shift += np.random.uniform(low=-2.0, high=2.0, size=2)
-        print(shift)
         img = dip.Shift(img0, shift, interpolationMethod='linear')
         img += 0.75 * (2. * np.random.random(img0.shape) - 1.)
         img = np.clip(img, a_min=0, a_max=1)
@@ -49,11 +48,8 @@ def ex_staggered_dots(show_napari=False):
 
     else:
         arr_aligned, shifts, shifts_cumul = process(arr)
-        print()
-        print(shifts)
-        print(shifts_cumul)
         return arr_aligned, shifts, shifts_cumul
 
 
 if __name__ == "__main__":
-    ex_staggered_dots(show_napari=False)
+    ex_staggered_dots(show_napari=True)
