@@ -56,6 +56,14 @@ def plot(values, fname):
     plt.savefig(fname)
 
 
+def hsorted(list_):
+    """ Sort the given list in the way that humans expect """
+    list_ = [str(x) for x in list_]
+    convert = lambda text: int(text) if text.isdigit() else text
+    alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
+    return sorted(list_, key=alphanum_key)
+
+
 class WorkingDirectory:
     """ Class to call user directory via the 'with' statement """
 

@@ -12,7 +12,7 @@ from tifffile import imwrite, TiffWriter
 from qtpy.QtWidgets import QProgressBar
 from qtpy.QtWidgets import QApplication
 
-from drift_correction.utils import WorkingDirectory, plot
+from drift_correction.utils import WorkingDirectory, hsorted, plot
 
 
 def on_init(widget):
@@ -102,7 +102,7 @@ def process(arr,
         for i, img in enumerate(arr):
             imwrite(dirname_img / f"img_{i:03d}.tif", img)
 
-        fnames = list(dirname_img.glob('img_*.tif'))[ind_min:ind_max + 1]
+        fnames = hsorted(dirname_img.glob('img_*.tif'))[ind_min:ind_max + 1]
         nframes = len(fnames)
         shape = img.shape
         arr_aligned = np.zeros((nframes, shape[0], shape[1]))
