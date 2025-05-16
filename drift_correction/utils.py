@@ -1,6 +1,7 @@
 """
 Utilities functions
 """
+import re
 from pathlib import Path
 from tempfile import gettempdir
 import numpy as np
