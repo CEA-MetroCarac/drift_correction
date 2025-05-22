@@ -2,20 +2,20 @@
     <img align="center" width=300 src=./resources/logo.png>
 </p>
 
-**Drift-correction** is an application dedicated to easily realign frames of a stack images using [Napari](https://napari.org/) as a viewer and the [DIPlib](https://diplib.org/) library for the shift calculation.
+**Drift-correction** is an application designed to easily realign frames in image stacks, using [Napari](https://napari.org/) as the viewer and the [DIPlib](https://diplib.org/) library for shift calculation.
 
-Input format are ``.tif``, .``dm3``/``.dm4``, ``.npy`` or any other format supported by Napari.
+Supported input formats include ``.tif``, .``dm3``/``.dm4``, ``.npy`` and any other format compatible with Napari.
 
-Extra files displaying the frame-by-frame shift and the cumulative one can be saved at the same location as the input file directory.
+Additional files showing the frame-by-frame and cumulative shifts can be saved in the same directory as the input file.
 
-The saving of the realigned stack is done from the Napari **Files** tab.
+The realigned stack can be saved via the Napari **Files** tab.
 
 
 <p align="center" width="100%">
     <img align="center" src="./resources/drift_correction.gif">
 </p>
 <p align="center">
-    <em>Illustration of the drift correction processing on a analytical test case (non corrected stack in grey and corrected (and reduced) stack in green).</em>
+    <em>Illustration of drift correction on a synthetic test case — the uncorrected stack is shown in gray, and the corrected (cropped) version in green.</em>
 </p>
 
 <p align="center" width="100%">
@@ -23,19 +23,19 @@ The saving of the realigned stack is done from the Napari **Files** tab.
     <img align="center" width="45%" src="./resources/shifts_cumul.png">
 </p>
 <p align="center">
-    <em>The corresponding calculated shifts frame by frame (left) and cumulative one (right).</em>
+    <em>The corresponding frame-by-frame (left) and cumulative (right) shifts.</em>
 </p>
 
 ## Installation and launching
 
 ```bash
 pip install git+https://github.com/CEA-MetroCarac/drift_correction.git
-drift_correction
+drift-correction
 ```
 
 ## Scripting mode
 
-The drift correction processing can also be performed using python scripting (without the napari GUI), considering a 3D array for 'arr', as:
+Drift correction can also be performed via Python scripting (without the Napari GUI), by passing a 3D array ``arr`` to the function as shown in:
 
 ```bash
 from drift_correction import process
@@ -45,8 +45,8 @@ arr_aligned, shifts, shifts_cumul = process(arr,
                                             dirname=None, fname_aligned=None, working_dir=None)
 ```
 
-See the [example_analytical.py](./examples/example_analytical.py) for a demo and the docstring for more details about the arguments to be passed to the function [process()](./drift_correction/drift_correction.py#L59-L95).
+See [example_analytical.py](./examples/example_analytical.py) for a demonstration and refer to the function docstring [process()](./drift_correction/drift_correction.py#L59-L95) for details on the arguments.
 
 ## Acknowledgements
 
-This work, carried out at CEA-PFNC (Platform for Nanocharacterisation), was supported by the “Recherche Technologique de Base” program of the French National Research Agency (ANR).
+This work, carried out at **CEA-PFNC** (Platform for Nanocharacterisation), was supported by the “Recherche Technologique de Base” program of the French National Research Agency (ANR).
