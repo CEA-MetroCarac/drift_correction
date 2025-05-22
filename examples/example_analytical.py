@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import diplib as dip
 import napari
 
-from drift_correction.drift_correction import napari_widget, process
+from drift_correction import napari_widget, process
 
 try:
     from utils import multi_dots
