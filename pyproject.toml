@@ -44,6 +44,9 @@ version = { attr = "drift_correction.VERSION" }
 [tool.setuptools.package-data]
 "drift_correction" = ["napari.yaml"]
 
+[project.scripts]
+drift-correction = "drift_correction.drift_correction:launch"
+
 [project.entry-points."napari.manifest"]
 "drift-correction" = "drift_correction:napari.yaml"
 
