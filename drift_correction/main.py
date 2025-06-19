@@ -88,8 +88,8 @@ def process_dirname(dirname, ind_min=0, ind_max=9999, pbar_update=None):
 
     shifts = []
     for k, fname in enumerate(fnames):
-        img_ = imread(fname)
-        img = dip.ImageRead(str(fname))
+        # img = dip.ImageRead(fname) # get some troubles sometimes
+        img = dip.Image(imread(fname))
 
         if k > 0:
 
