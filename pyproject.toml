@@ -28,17 +28,13 @@ dependencies = [
     "numpy",
     "matplotlib",
     "tifffile",
+    "dm3_lib @ git+https://github.com/piraynal/pyDM3reader.git",
     "diplib",
 ]
 
 [project.optional-dependencies]
-napari = [
-    "napari",
-    "dm3_lib @ git+https://github.com/piraynal/pyDM3reader.git",
-]
-dev = [
-    "pytest"
-]
+napari = ["napari"]
+dev = ["pytest"]
 
 
 [tool.setuptools.packages.find]
