@@ -3,7 +3,6 @@ Utilities functions
 """
 import re
 from pathlib import Path
-from tempfile import gettempdir
 import numpy as np
 import tifffile
 import dm3_lib as dm3
@@ -58,16 +57,3 @@ def hsorted(list_):
     alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
     return sorted(list_, key=alphanum_key)
 
-
-class WorkingDirectory:
-    """ Class to call user directory via the 'with' statement """
-
-    def __init__(self, dirname=None):
-        dirname = dirname or Path(gettempdir()) / "drift_correction"
-        self.dirname = Path(dirname)
-
-    def __enter__(self):
-        return self.dirname
-
-    def __exit__(self, exc, value, tb):
-        pass

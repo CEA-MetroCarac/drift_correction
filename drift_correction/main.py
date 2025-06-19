@@ -2,13 +2,14 @@
 Main functions dedicated to the drift correction processing
 """
 import sys
+import tempfile
 from pathlib import Path
 import time
 import numpy as np
 import diplib as dip
 from tifffile import imread, imwrite
 
-from drift_correction.utils import WorkingDirectory, hsorted, plot
+from drift_correction.utils import hsorted, plot
 
 
 def process_3d_array(arr3d, working_dir=None,
@@ -42,16 +43,15 @@ def process_3d_array(arr3d, working_dir=None,
     """
     assert arr3d.ndim == 3
 
-    with WorkingDirectory(dirname=working_dir) as working_dir:
-        dirname = working_dir / "images"
-        dirname.mkdir(parents=True, exist_ok=True)
+    working_dir = Path(working_dir) or tempfile.gettempdir()
+    dirname = working_dir / "images"
+    dirname.mkdir(parents=True, exist_ok=True)
+    [fname.unlink() for fname in dirname.glob("img*.tif")]  # directory cleaning-up
 
-        [fname.unlink() for fname in dirname.glob("img*.tif")]
+    for i, img in enumerate(arr3d):
+        imwrite(dirname / f"img_{i:04d}.tif", img)
 
-        for i, img in enumerate(arr3d):
-            imwrite(dirname / f"img_{i:04d}.tif", img)
-
-        return process_dirname(dirname, ind_min=ind_min, ind_max=ind_max, pbar_update=pbar_update)
+    return process_dirname(dirname, ind_min=ind_min, ind_max=ind_max, pbar_update=pbar_update)
 
 
 def process_dirname(dirname, ind_min=0, ind_max=9999, pbar_update=None):
