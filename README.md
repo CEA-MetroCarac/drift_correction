@@ -28,7 +28,7 @@ The realigned stack can be saved via the Napari **Files** tab.
 
 ## Installation and launching
 
-For a simple install (drift-correction via python scripting only):
+For a simple install to perform drift-correction via python scripting only (see below):
 
 ```bash
 pip install git+https://github.com/CEA-MetroCarac/drift_correction.git
@@ -41,10 +41,11 @@ pip install git+https://github.com/CEA-MetroCarac/drift_correction.git#egg=drift
 pip install PyQt5     # or PyQt6, PySide2, PySide6, if no Qt backend have been already installed in your env.
 drift-correction
 ```
+(Requires about 750MB of free disk space.)
 
 ## Scripting mode
 
-Drift correction can also be performed via Python scripting (without the Napari GUI), by passing a 3D array ``arr3d`` or a ``dirname`` to the dedicated functions as shown in:
+without the Napari GUI, the drift correction can be performed via Python scripting, considering a 3D array ``arr3d`` or a ``dirname`` with the labeled '.tif' images to handle. Example:
 
 ```bash
 from drift_correction import process_array, process_dirname
