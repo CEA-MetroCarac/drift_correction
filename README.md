@@ -28,24 +28,32 @@ The realigned stack can be saved via the Napari **Files** tab.
 
 ## Installation and launching
 
+For a simple install (drift-correction via python scripting only):
+
 ```bash
 pip install git+https://github.com/CEA-MetroCarac/drift_correction.git
+```
+
+For an install with the napari-GUI:
+
+```bash
+pip install git+https://github.com/CEA-MetroCarac/drift_correction.git#egg=drift_correction[napari]
+pip install PyQt5     # or PyQt6, PySide2, PySide6, if no Qt backend have been already installed in your env.
 drift-correction
 ```
 
 ## Scripting mode
 
-Drift correction can also be performed via Python scripting (without the Napari GUI), by passing a 3D array ``arr`` to the function as shown in:
+Drift correction can also be performed via Python scripting (without the Napari GUI), by passing a 3D array ``arr3d`` or a ``dirname`` to the dedicated functions as shown in:
 
 ```bash
-from drift_correction import process
+from drift_correction import process_array, process_dirname
 
-arr_aligned, shifts, shifts_cumul = process(arr,
-                                            ind_min=0, ind_max=9999, pbar_update=None,
-                                            dirname=None, fname_aligned=None, working_dir=None)
+arr_aligned, shifts, shifts_cumul = process_3d_array(arr3d, ind_min=0, ind_max=9999)
+arr_aligned, shifts, shifts_cumul = process_dirname(dirname, ind_min=0, ind_max=9999)
 ```
 
-See [example_analytical.py](./examples/example_analytical.py) for a demonstration and refer to the function docstring [process()](./drift_correction/drift_correction.py#L59-L95) for details on the arguments.
+See [example_analytical.py](./examples/example_analytical.py) for a demonstration and refer to the docstrings [process_3d_array()](./drift_correction/main.py#L14-L42) and [process_dirname()](./drift_correction/main.py#L57-L81) for more details on the arguments to be passed to the functions.
 
 ## Acknowledgements
 

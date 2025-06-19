@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import diplib as dip
 import napari
 
-from drift_correction import napari_widget, process
+from drift_correction import napari_widget, process_3d_array
 
 try:
     from utils import multi_dots
@@ -47,7 +47,7 @@ def ex_staggered_dots(show_napari=False):
         plt.show()  # plot shifts.png and shifts_cumul.png once napari is closed
 
     else:
-        arr_aligned, shifts, shifts_cumul = process(arr)
+        arr_aligned, shifts, shifts_cumul = process_3d_array(arr)
         return arr_aligned, shifts, shifts_cumul
 
 

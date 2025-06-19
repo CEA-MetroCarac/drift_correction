@@ -8,28 +8,14 @@ import numpy as np
 import tifffile
 import dm3_lib as dm3
 import matplotlib.pyplot as plt
-from qtpy.QtWidgets import QMessageBox
 
 
-def error(message):
-    """
-    Shows a pop-up with the given error message.
-    """
-    e = QMessageBox()
-    print("ERROR: ", message)
-    e.setText(message)
-    e.setIcon(QMessageBox.Critical)
-    e.setWindowTitle("Error")
-    e.show()
-    return e
-
-
-def get_reader(fname):
+def get_reader(path):
     """ Return reader for 'tif' or 'dm' file """
-    if isinstance(fname, str):
-        if fname.endswith(('.tif', '.tiff')):
+    if isinstance(path, str):
+        if path.endswith(('.tif', '.tiff')):
             return read_tif
-        elif fname.endswith(('.dm3', '.dm4')):
+        elif path.endswith(('.dm3', '.dm4')):
             return read_dm
     return None
 
@@ -55,6 +41,14 @@ def plot(values, fname):
     ax.set_xlabel('# Frames')
     ax.legend()
     plt.savefig(fname)
+
+
+def save_and_plot(dirname, shifts, shifts_cumul):
+    """ Plot and save 'shifts' and 'shifts_cumul' """
+    plot(shifts, dirname / "shifts.png")
+    plot(shifts_cumul, dirname / "shifts_cumul.png")
+    np.savetxt(dirname / "shifts.txt", shifts)
+    np.savetxt(dirname / "shifts_cumul.txt", shifts_cumul)
 
 
 def hsorted(list_):

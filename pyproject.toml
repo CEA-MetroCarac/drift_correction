@@ -27,16 +27,24 @@ classifiers = [
 dependencies = [
     "numpy",
     "matplotlib",
+    "tifffile",
     "diplib",
-    "napari[all]",
-    "napari-plugin-engine",
-    "magicgui",
+]
+
+[project.optional-dependencies]
+napari = [
+    "napari",
     "dm3_lib @ git+https://github.com/piraynal/pyDM3reader.git",
+]
+dev = [
+    "pytest"
 ]
 
 
-[tool.setuptools]
-packages = ["drift_correction"]
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["drift_correction*"]
+namespaces = false
 
 [tool.setuptools.dynamic]
 version = { attr = "drift_correction.VERSION" }
@@ -45,7 +53,7 @@ version = { attr = "drift_correction.VERSION" }
 "drift_correction" = ["napari.yaml"]
 
 [project.scripts]
-drift-correction = "drift_correction.drift_correction:launch"
+drift-correction = "drift_correction.gui:launch"
 
 [project.entry-points."napari.manifest"]
 "drift-correction" = "drift_correction:napari.yaml"
@@ -53,11 +61,6 @@ drift-correction = "drift_correction.drift_correction:launch"
 [tool.pytest.ini_options]
 minversion = "6.0"
 testpaths = ["tests"]
-
-[project.optional-dependencies]
-dev = [
-    "pytest",
-]
 
 [project.urls]
 Repository = "https://github.com/CEA-MetroCarac/drift_correction.git"
