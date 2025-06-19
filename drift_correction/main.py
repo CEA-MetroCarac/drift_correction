@@ -23,7 +23,8 @@ def process_3d_array(arr3d, working_dir=None,
         Image stack to handle
     working_dir: str, optional
         Dirname related to the working directory where the images stack is split into individual
-        frames before processing. If None, create a temporarily directory
+        frames before processing.
+        If None, create a 'drift_correction/images' folder in the user Temp directory.
     ind_min: int, optional
         Index related to the first frame to handle
     ind_max: int, optional
@@ -43,8 +44,8 @@ def process_3d_array(arr3d, working_dir=None,
     """
     assert arr3d.ndim == 3
 
-    working_dir = Path(working_dir) or tempfile.gettempdir()
-    dirname = working_dir / "images"
+    working_dir = working_dir or Path(tempfile.gettempdir()) / "drift_correction"
+    dirname = Path(working_dir) / "images"
     dirname.mkdir(parents=True, exist_ok=True)
     [fname.unlink() for fname in dirname.glob("img*.tif")]  # directory cleaning-up
 
