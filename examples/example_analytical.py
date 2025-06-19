@@ -4,9 +4,8 @@ Analytical examples
 import numpy as np
 import matplotlib.pyplot as plt
 import diplib as dip
-import napari
 
-from drift_correction import napari_widget, process_3d_array
+from drift_correction import process_3d_array
 
 try:
     from utils import multi_dots
@@ -34,6 +33,9 @@ def ex_staggered_dots(show_napari=False):
         arr[k] = img
 
     if show_napari:
+
+        import napari
+        from drift_correction.gui import napari_widget
 
         viewer = napari.Viewer()
         layer = viewer.add_image(arr, name='Image Stack')
